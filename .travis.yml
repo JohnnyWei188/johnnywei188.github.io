@@ -1,0 +1,45 @@
+language: node_js
+node_js: stable
+
+cache:
+  directories:
+  - ~/.npm
+  - node_modules
+
+# env: 
+#  global:
+#    - GH_REF: github.com/johnnywei188/johnnywei188.github.io.git
+#    - secure: "slmG+PgydoHXnsGGQZX9syek5Zg5xwyNNqN2Yy24Od5gzK8ZkQfGephmsZRRzldo8LlVCaC7DjP4YE8N5BDZYGJ81B0+jxAaKTOLOwzmH6KD1Y4cfKOUPvarqaDqT1qvt91nzDWdVtrgLmgBemHD6vN/44vz7jclbMXSQkxwv/YXHFnYd6GEYJniLN0tHnm++7jObqTMFkcs1mqPnGXwnCuownoUveyCikVIU8D2CPz1YoYQC380DysWnh52VbNSs10U71UqevbNhk9JTRFxRFOHkYlXU0beM4hR68PqPyebGQfuKB9/vkzOjcUB5by991lYX/Z4ORMv0vbOKsDUBth1G+NlY4gaFUswhQSelT9g1lBZ3Q1HT1cPyFIb4FydrrPc0OqMbbaEvGuKIUvj3WSx8sJVabE9MOZ6Un6l0YwHsFX23rQVcaXADXM6bT3sJXtAsI8siAqIhmbuXGvgfX406jAIEJ1OpPGiblwPdbIzztX+CrYy8pwpsAXvaFqdaNVFP1u+HSArKisljCDS6+UAw0yOoVwH4khngS5Q9FbkPFbN1QVjp9/FSsBsR9P+PoQIUYu3XBKLieZe8xP9yuoYuxZvbVz47LsX1DIAUL/qDeqASS0qd/jWcSJVmDSV+Hf9q6jOl82v3qsMT648FP8skO6h9wlLKY3KTWAycyk="
+
+#S
+# after_script:
+#   - cd ./public
+#   - git init
+#   - git config user.name "JohnnyWei188"
+#   - git config user.email "JohnnyWei188@gmail.com"
+#   - git add .
+#   - git commit -m "Update docs"
+#   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+#E: 
+
+
+install:
+  - npm install hexo-cli -g
+  - npm install
+
+before_script:
+  - openssl aes-256-cbc -K $encrypted_ffdfc123d95c_key -iv $encrypted_ffdfc123d95c_iv -in .travis/id_rsa.enc -out ~/.ssh/id_rsa -d
+  - chmod 600 ~/.ssh/id_rsa
+  - eval $(ssh-agent)
+  - ssh-add ~/.ssh/id_rsa
+  - cp .travis/ssh_config ~/.ssh/config
+  - git config --global user.name 'JohnnyWei188'
+  - git config --global user.email JohnnyWei188@gmail.com
+
+script:
+  - hexo d -g
+
+
+branches:
+  only:
+    - blog-source 
