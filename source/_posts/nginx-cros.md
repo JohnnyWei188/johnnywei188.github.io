@@ -1,6 +1,6 @@
 ---
 title: 记录一次解决nginx跨域的问题 
-date: 2018-08-13
+date: 2019-01-15
 tags:
   - nginx 
 categories:
