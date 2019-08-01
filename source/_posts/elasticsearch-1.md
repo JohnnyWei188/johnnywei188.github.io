@@ -7,6 +7,7 @@ categories:
   - 技术
 ---
 最近因为项目接触了下elasticsearch， 其实以前一直有所接触，PHP项目的时候有写过几个demo，现在转到go这边，又写了几个demo，比较认真的看了下es的文档。
+< !--more-->
 
 ##### 安装
 安装我都是通过docker-compose来安装，顺便也安装了一下kibana，es装了个集群，就是安装之后本机有点卡。以下是compose的配置

@@ -11,7 +11,7 @@ categories:
 
 ##### etcd是什么？ 
 etcd是使用go语言开发的一个高可用的分布式key-value数据库, etcd可在分布式系统中共享配置和服务发现，起内部采用Raft协议实现的分布式一致算法。
-
+< !--more-->
 
 ##### etcd有哪些特性？
 - 简单：基于HTTP+JSON的API
