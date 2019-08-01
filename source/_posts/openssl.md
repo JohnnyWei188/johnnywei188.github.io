@@ -1,6 +1,6 @@
 ---
 title: openssl相关介绍 
-date: 2019-08-01 14:21:18
+updated: 2019-08-01 14:21:18
 tags:
   - Linux  
 categories:
@@ -9,7 +9,7 @@ categories:
 
 ##### 概述
 openssl是一个开源的软件包, 我们可以使用它用来进行安全通信, 它主要分为三个功能部分，SSL协议库、应用程序和密码算法库。
-< !--more-->
+<!--more-->
 
 ##### openssl的应用场景是什么？
 在https协议中， http下层的传输协议由TCP/IP变成了SSL/TLS。 说到这里，需要了解下SSL(安全套接层协议)和TLS(传输层安全)他们之间的联系。在我认为TLS其实就是SSL，只不过一开始不存在TLS，在SSL发展到v3版本的时候，在1999年的被IETF改名了，正式成为了一个安全传输协议的标准。所以，TLSv1.0应该是基本等价SSLv3.1。

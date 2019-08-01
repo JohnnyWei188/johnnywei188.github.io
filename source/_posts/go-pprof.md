@@ -1,5 +1,6 @@
 ---
 title: 使用go pprof对程序进行性能分析 
+date : 2019-03-15
 tags:
   - Docker 
   - Go 
@@ -7,7 +8,7 @@ categories:
   - 技术
 ---
 写了个一个go的基础组件给团队使用,主要功能是watch到kubernetes中集群中service的状态，针对service对应的pods的变化为对应的pod授权访问到MySQL服务，服务上线后没几天发现出现了CPU使用非常高的情况，所以使用了pprof对整个程序进行了分析。
-< !--more-->
+<!--more-->
 
 贴个图片看下,从图中我们可以看到这个程序占用的CPU非常的高，通过strace跟踪进程也没发现异常，进程是处于wait的状态.
 {% asset_img cpu.png cpu profile %}

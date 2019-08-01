@@ -9,6 +9,7 @@ categories:
 
 ##### CROS是什么？ 
 CROS,全称是跨域资源共享 (Cross-origin resource sharing)，它的提出就是为了解决跨域请求的。
+<!--more-->
 
 #### nginx中的一些配置
 ```

@@ -11,7 +11,7 @@ categories:
 
 ##### Fannel是什么？ 
 Fannel是使用UDP实现的一种覆盖网络(Overlay)，即表示运行在一个网上的网。并不依靠IP地址来传递信息，而是采用一种映射机制，把IP地址和identifiers来做映射来资源定位。也就是将TCP数据包装在另一种网络包里面进行路由转发和通信。
-< !--more-->
+<!--more-->
 
 ##### Fannel的运用场景是什么？
 Flannel是CoreOS团队针对Kubernetes设计的一个网络规划服务，它的功能就是让集群中不同节点主机创建的Docker容器都具有全局唯一的虚拟IP, 并且能让他们相互ping通。

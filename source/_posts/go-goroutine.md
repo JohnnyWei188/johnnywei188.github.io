@@ -1,5 +1,6 @@
 ---
 title: golang控制goroutine
+date: 2019-02-02
 tags:
   - Go 
   - golang
@@ -7,6 +8,7 @@ categories:
   - 技术
 ---
 golang中的goroutine启动之后，因为不像其他的语言启动线程之后有个句柄可以对线程进行关闭或者其他的操作，所以很不好控制，最近就遇到需要gotoutine关闭重新加载配置的这一项操作。记录下goroutine重启的方案。
+<!-- more -->
 
 ##### 如何把当前已经启动的goroutine退出，退出后再另外拉起新的goroutine
 需要说明的是，我这个应用是一个服务型的应用，goroutine拉起之后以一个常驻的线程在服务端, 代码如下：
