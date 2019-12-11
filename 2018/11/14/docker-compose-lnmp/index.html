@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Docker,Lnmp,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近一直都在做微服务的开发，因为Docker容器技术的出现，为微服务架构提供了更为便利的条件，我们可以拆分我们的业务为一个一个小的单元进行部署，每个单元相互独立。微服务具有分布式系统的特性，比如横向伸缩性，服务发现，负载均衡，故障转移和高可用等。另外我们可能还有多版本支持，灰度发布，服务降级等。本文主要说的是怎么使用docker来构建一个本地的lnmp开发环境。">
+<meta name="keywords" content="Docker,Lnmp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用docker-compose来构建一个本地的lnmp开发环境">
+<meta property="og:url" content="https://smiled.me/2018/11/14/docker-compose-lnmp/index.html">
+<meta property="og:site_name" content="逝水流年">
+<meta property="og:description" content="最近一直都在做微服务的开发，因为Docker容器技术的出现，为微服务架构提供了更为便利的条件，我们可以拆分我们的业务为一个一个小的单元进行部署，每个单元相互独立。微服务具有分布式系统的特性，比如横向伸缩性，服务发现，负载均衡，故障转移和高可用等。另外我们可能还有多版本支持，灰度发布，服务降级等。本文主要说的是怎么使用docker来构建一个本地的lnmp开发环境。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-01T08:41:21.036Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用docker-compose来构建一个本地的lnmp开发环境">
+<meta name="twitter:description" content="最近一直都在做微服务的开发，因为Docker容器技术的出现，为微服务架构提供了更为便利的条件，我们可以拆分我们的业务为一个一个小的单元进行部署，每个单元相互独立。微服务具有分布式系统的特性，比如横向伸缩性，服务发现，负载均衡，故障转移和高可用等。另外我们可能还有多版本支持，灰度发布，服务降级等。本文主要说的是怎么使用docker来构建一个本地的lnmp开发环境。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://smiled.me/2018/11/14/docker-compose-lnmp/">
+
+
+
+
+
+  <title>使用docker-compose来构建一个本地的lnmp开发环境 | 逝水流年</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?b32367772dda1b31e98397e856c7627a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">逝水流年</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">追求卓越</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://smiled.me/2018/11/14/docker-compose-lnmp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JohnnyWei">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="逝水流年">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用docker-compose来构建一个本地的lnmp开发环境</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-14T16:00:00+00:00">
+                2018-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/11/14/docker-compose-lnmp/" class="leancloud_visitors" data-flag-title="使用docker-compose来构建一个本地的lnmp开发环境">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近一直都在做微服务的开发，因为Docker容器技术的出现，为微服务架构提供了更为便利的条件，我们可以拆分我们的业务为一个一个小的单元进行部署，每个单元相互独立。微服务具有分布式系统的特性，比如横向伸缩性，服务发现，负载均衡，故障转移和高可用等。另外我们可能还有多版本支持，灰度发布，服务降级等。本文主要说的是怎么使用docker来构建一个本地的lnmp开发环境。</p>
+<a id="more"></a>
+<p>因为lnmp环境是需要我们部署多个服务，比如php, nginx, redis, mysql等，所以这里是通过使用docker官方下的一个项目叫Compose的工具来实现服务的快速编排。 <code>Compose是Docker官方的一个开源项目，主要负责是Docker容器集群的快速编排，官方文档说的是Compose可以定义和运行多个容器应用，通过docker-compose.yaml文件可以配置和定义你的服务。</code></p>
+<h4 id="docker-compose-yaml文件配置"><a href="#docker-compose-yaml文件配置" class="headerlink" title="docker-compose.yaml文件配置"></a>docker-compose.yaml文件配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">version: &apos;3&apos;</div><div class="line">services: </div><div class="line">    nginx:</div><div class="line">        build: ./nginx </div><div class="line">        ports:</div><div class="line">            - &quot;80:80&quot;</div><div class="line">        volumes:</div><div class="line">            - &quot;./nginx/volume-nginx/project:/etc/nginx/project&quot;</div><div class="line">            - &quot;./nginx/volume-nginx/lualib:/etc/nginx/lualib&quot; </div><div class="line">            - &quot;./nginx/volume-nginx/nginx.conf:/etc/nginx/nginx.conf&quot;</div><div class="line">            - &quot;./nginx/volume-nginx/logs:/etc/nginx/logs&quot;</div><div class="line">            - &quot;./nginx/volume-nginx/vhosts:/etc/nginx/vhosts&quot;</div><div class="line">            - &quot;./nginx/volume-nginx/ssl:/etc/nginx/ssl&quot;</div><div class="line">            - &quot;~/wwwroot:/Users/Johnny/wwwroot&quot;</div><div class="line">        networks:</div><div class="line">            - webnet</div><div class="line"></div><div class="line">    php:</div><div class="line">        build: ./php </div><div class="line">        ports:</div><div class="line">            - &quot;9000:9000&quot;</div><div class="line">        volumes:</div><div class="line">            - &quot;~/wwwroot:/Users/Johnny/wwwroot&quot;</div><div class="line">            - &quot;./php/php-fpm.d:/usr/local/etc/php-fpm.d&quot;</div><div class="line">            - &quot;./php/logs:/usr/local/etc/logs&quot;</div><div class="line">        networks:</div><div class="line">            - webnet</div><div class="line"></div><div class="line">    etcd-browser:</div><div class="line">        build: ./etcd-browser </div><div class="line">        ports:</div><div class="line">            - &quot;8000:8000&quot;</div><div class="line">        environment:</div><div class="line">            ETCD_HOST: 10.10.134.33</div><div class="line">            ETCD_PORT: 2379</div><div class="line">        networks:</div><div class="line">            - webnet</div><div class="line"></div><div class="line">    mysql:</div><div class="line">        build: ./mysql </div><div class="line">        ports:</div><div class="line">            - &quot;3306:3306&quot;</div><div class="line">        volumes:</div><div class="line">            - &quot;./mysql-data:/var/lib/mysql&quot;</div><div class="line">        environment:</div><div class="line">            MYSQL_ROOT_PASSWORD: 123456</div><div class="line">        networks:</div><div class="line">            - webnet</div><div class="line"></div><div class="line">    adminer:</div><div class="line">        image: adminer</div><div class="line">        restart: always</div><div class="line">        ports:</div><div class="line">            - 8080:8080</div><div class="line"></div><div class="line">    redis:</div><div class="line">        build: ./redis </div><div class="line">        ports:</div><div class="line">            - &quot;6379:6379&quot;</div><div class="line">        networks:</div><div class="line">            - webnet</div><div class="line"></div><div class="line">    memcached:</div><div class="line">        build: ./memcached</div><div class="line">        ports:</div><div class="line">            - &quot;11211:11211&quot;</div><div class="line">        networks:</div><div class="line">            - webnet</div><div class="line"></div><div class="line">networks:</div><div class="line">    webnet:</div></pre></td></tr></table></figure>
+<h6 id="docker-compose-yaml文件存在的意义和相关配置含义"><a href="#docker-compose-yaml文件存在的意义和相关配置含义" class="headerlink" title="docker-compose.yaml文件存在的意义和相关配置含义"></a>docker-compose.yaml文件存在的意义和相关配置含义</h6><p>我们通过docker-compose.yaml文件就可以直接为一个docker应用定义它的相关服务、网络、和容器卷，可以非常方便的就为我们搭建起多个容器的应用。所以，用docker-compose来构建我们的lnmp环境就在合适不过。配置的相关含义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">version: &apos;3&apos;</div><div class="line">services: </div><div class="line">    mysql:</div><div class="line">        build: ./mysql </div><div class="line">        ports:</div><div class="line">            - &quot;3306:3306&quot;</div><div class="line">        volumes:</div><div class="line">            - &quot;./mysql-data:/var/lib/mysql&quot;</div><div class="line">        environment:</div><div class="line">            MYSQL_ROOT_PASSWORD: 123456</div><div class="line">        networks:</div><div class="line">            - webnet</div></pre></td></tr></table></figure></p>
+<ul>
+<li>version: 3  全局配置，表示的是当前yaml文件格式版本为3，你也可以指定为1，或者2，因为docker引擎在不断的升级，每一次发布机会都有新的特性和新的API，所以我们通过指定Yaml文件版本，可以指定当前配置适用于docker的版本</li>
+<li>services:  是一个对象，用以定义服务列表，可以定义多个</li>
+<li>mysql:  指定的服务名称，这个名称可以随便取</li>
+<li><p>build: ./mysql 构建指定的服务，可以是一个对象，如果直接是一个字符串的话，则指定的是构建目录，目录可以是相对路径和绝对路径，相对路径是基于docker-compose.yaml文件的目录, 如果build定义的是一个对象的话，可以像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mysql:</div><div class="line">   build:</div><div class="line">     context: ./mysql  //定义构建目录</div><div class="line">     dockerfile: Dockerfile-alternate   //可选的参数，用以指定另外的Dockerfile，默认是用context目录下的Dockerfile</div><div class="line">     args:  //可选的参数，设置构建参数</div><div class="line">       buildno: 1</div></pre></td></tr></table></figure>
+</li>
+<li><p>ports:  //指定端口映射关系80-&gt;80，可以指定多组的端口映射</p>
+<ul>
+<li>80:80</li>
+<li>9000:9000</li>
+</ul>
+</li>
+<li>volumes:  //本地目录./mysql-data挂载为docker容器中的/var/lib/mysql，可以挂载多组</li>
+<li><p>networks: //指定加入的网络名称，多个容器可以共享一个网络, 还可以设置网络的别名，如下，在相同网络下的其他容器，可以使用其别名进行网络连接: 如下：<br>  webnet:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- networks: </div><div class="line">    webnet:</div><div class="line">      aliases:</div><div class="line">       - databases</div><div class="line">	legacy:</div><div class="line">      aliases:</div><div class="line">       - mysql</div></pre></td></tr></table></figure>
+</li>
+<li><p>environment:  //设置容器启动的时候环境变量<br> MYSQL_ROOT_PASSWORD: 123456</p>
+</li>
+<li>其他还有很多参数，可以参考文档，这里列举的只是几个基础的参数</li>
+</ul>
+<h4 id="这个是我使用docker构建lnmp的目录结构"><a href="#这个是我使用docker构建lnmp的目录结构" class="headerlink" title="这个是我使用docker构建lnmp的目录结构"></a>这个是我使用docker构建lnmp的目录结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">├── docker-compose.yaml</div><div class="line">├── etcd-browser</div><div class="line">│   ├── Dockerfile</div><div class="line">│   ├── LICENSE</div><div class="line">│   ├── README.md</div><div class="line">│   ├── etcd-browser.service</div><div class="line">│   ├── frontend</div><div class="line">│   └── server.js</div><div class="line">├── memcached</div><div class="line">│   └── Dockerfile</div><div class="line">├── mysql</div><div class="line">│   └── Dockerfile</div><div class="line">├── mysql-data</div><div class="line">│   ├── auto.cnf</div><div class="line">│   ├── ca-key.pem</div><div class="line">│   ├── ca.pem</div><div class="line">│   ├── client-cert.pem</div><div class="line">│   ├── client-key.pem</div><div class="line">│   ├── ib_buffer_pool</div><div class="line">│   ├── ib_logfile0</div><div class="line">│   ├── ib_logfile1</div><div class="line">│   ├── ibdata1</div><div class="line">│   ├── ibtmp1</div><div class="line">│   ├── mysql</div><div class="line">│   ├── performance_schema</div><div class="line">│   ├── private_key.pem</div><div class="line">│   ├── public_key.pem</div><div class="line">│   ├── server-cert.pem</div><div class="line">│   ├── server-key.pem</div><div class="line">│   ├── sys</div><div class="line">│   ├── test</div><div class="line">│   └── xfile</div><div class="line">├── nginx</div><div class="line">│   ├── Dockerfile</div><div class="line">│   ├── start.sh</div><div class="line">│   └── volume-nginx</div><div class="line">├── php</div><div class="line">│   ├── Dockerfile</div><div class="line">│   ├── logs</div><div class="line">│   └── php-fpm.d</div><div class="line">└── redis</div><div class="line">    └── Dockerfile</div></pre></td></tr></table></figure>
+<h4 id="docker-compose的一些常用命令"><a href="#docker-compose的一些常用命令" class="headerlink" title="docker-compose的一些常用命令"></a>docker-compose的一些常用命令</h4><p>列出启动的服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">▶ docker-compose ps</div><div class="line">        Name                       Command               State            Ports</div><div class="line">-----------------------------------------------------------------------------------------</div><div class="line">docker_adminer_1        entrypoint.sh docker-php-e ...   Up      0.0.0.0:8080-&gt;8080/tcp</div><div class="line">docker_etcd-browser_1   nodejs server.js                 Up      0.0.0.0:8000-&gt;8000/tcp</div><div class="line">docker_memcached_1      docker-entrypoint.sh memcached   Up      0.0.0.0:11211-&gt;11211/tcp</div><div class="line">docker_mysql_1          docker-entrypoint.sh mysqld      Up      0.0.0.0:3306-&gt;3306/tcp</div><div class="line">docker_nginx_1          nginx -g daemon off;             Up      0.0.0.0:80-&gt;80/tcp</div><div class="line">docker_php_1            docker-php-entrypoint php-fpm    Up      0.0.0.0:9000-&gt;9000/tcp</div><div class="line">docker_redis_1          docker-entrypoint.sh redis ...   Up      0.0.0.0:6379-&gt;6379/tcp</div></pre></td></tr></table></figure></p>
+<p>重新启动指定的某个服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">▶ docker-compose restart nginx</div><div class="line">Restarting docker_nginx_1 ... done</div></pre></td></tr></table></figure></p>
+<p>构建服务, 我这是都已经构建好了的，build默认使用的是当前目录下的docker-compose.yml或者是docker-compose.yaml，我们可以可以使用-f参数指定docker-compose的配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">▶ docker-compose build</div><div class="line">Building nginx</div><div class="line">Step 1/1 : FROM nginx:latest</div><div class="line"> ---&gt; 40960efd7b8f</div><div class="line">Successfully built 40960efd7b8f</div><div class="line">Successfully tagged docker_nginx:latest</div><div class="line">Building php</div><div class="line">…………</div><div class="line">………………</div><div class="line">………………………</div></pre></td></tr></table></figure></p>
+<p>进入到某个已经运行的docker容器里面,<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">▶ docker-compose exec nginx bash</div><div class="line">root@daeafec686cf:/# ls -a</div><div class="line">.  ..  .dockerenv  Users  bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</div></pre></td></tr></table></figure></p>
+<p>打印容器运行的日志<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">▶ docker-compose logs -f nginx</div><div class="line">Attaching to docker_nginx_1</div></pre></td></tr></table></figure></p>
+<p>还有一些其他的命令，可以参考文档</p>
+<h4 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h4><ul>
+<li><a href="https://docs.docker.com/compose/compose-file/" target="_blank" rel="external">https://docs.docker.com/compose/compose-file/</a></li>
+<li><a href="https://github.com/JohnnyWei188/docker-compose-lnmp.git" target="_blank" rel="external">https://github.com/JohnnyWei188/docker-compose-lnmp.git</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    JohnnyWei
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://smiled.me/2018/11/14/docker-compose-lnmp/" title="使用docker-compose来构建一个本地的lnmp开发环境">https://smiled.me/2018/11/14/docker-compose-lnmp/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+            <a href="/tags/Lnmp/" rel="tag"># Lnmp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/11/elasticsearch-1/" rel="next" title="elasticsearch几个简单的查询">
+                <i class="fa fa-chevron-left"></i> elasticsearch几个简单的查询
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/15/nginx-cros/" rel="prev" title="记录一次解决nginx跨域的问题">
+                记录一次解决nginx跨域的问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDgzNy8xMTM3NA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpeg" alt="JohnnyWei">
+            
+              <p class="site-author-name" itemprop="name">JohnnyWei</p>
+              <p class="site-description motion-element" itemprop="description">Stay hungry stay foolish!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="github" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="twitter" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="weibo" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-compose-yaml文件配置"><span class="nav-number">1.</span> <span class="nav-text">docker-compose.yaml文件配置</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#docker-compose-yaml文件存在的意义和相关配置含义"><span class="nav-number">1.0.1.</span> <span class="nav-text">docker-compose.yaml文件存在的意义和相关配置含义</span></a></li></ol></li></ol><li class="nav-item nav-level-4"><a class="nav-link" href="#这个是我使用docker构建lnmp的目录结构"><span class="nav-number">2.</span> <span class="nav-text">这个是我使用docker构建lnmp的目录结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker-compose的一些常用命令"><span class="nav-number">3.</span> <span class="nav-text">docker-compose的一些常用命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JohnnyWei</span>
+
+  <span class="post-meta-divider">|</span>
+  <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("gSmOzB889570mDbVycqV924l-gzGzoHsz", "e18qK1zpyaC6BuBYq93KYRnQ");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
